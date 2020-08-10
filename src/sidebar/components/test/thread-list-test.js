@@ -103,6 +103,25 @@ describe('ThreadList', () => {
     wrapper.setProps({});
   };
 
+  context('invalid scroll container', () => {
+    beforeEach(() => {
+      sinon
+        .stub(document, 'querySelector')
+        .withArgs('.fake-js-thread-list-scroll-root')
+        .returns(fakeScrollContainer);
+    });
+
+    afterEach(() => {
+      document.querySelector.restore();
+    });
+
+    it('should throw an error if the scroll container is missing', () => {
+      assert.throws(() => {
+        createComponent();
+      }, 'Scroll container is missing');
+    });
+  });
+
   context('new annotation created in application', () => {
     it('clears the current selection in the store', () => {
       const wrapper = createComponent();

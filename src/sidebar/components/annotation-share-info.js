@@ -7,11 +7,17 @@ import { isPrivate } from '../util/permissions';
 import SvgIcon from '../../shared/components/svg-icon';
 
 /**
+ * @typedef {import('../../types/api').Group} Group
+ */
+
+/**
  * Render information about what group an annotation is in and
  * whether it is private to the current user (only me)
  */
 function AnnotationShareInfo({ annotation }) {
-  const group = useStore(store => store.getGroup(annotation.group));
+  const group = /** @type {Group} */ (useStore(store =>
+    store.getGroup(annotation.group)
+  ));
 
   // We may not have access to the group object beyond its ID
   const hasGroup = !!group;
@@ -20,10 +26,7 @@ function AnnotationShareInfo({ annotation }) {
   // URL (link) returned by the API for this group. Some groups do not have links
   const linkToGroup = hasGroup && group.links && group.links.html;
 
-  const annotationIsPrivate = isPrivate(
-    annotation.permissions,
-    annotation.user
-  );
+  const annotationIsPrivate = isPrivate(annotation.permissions);
 
   return (
     <div className="annotation-share-info u-layout-row--align-baseline">
